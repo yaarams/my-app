@@ -70,7 +70,6 @@ export function streamFetch(dispatch: React.Dispatch<Action>) {
                         controller.enqueue(value);
                         // const str = "[" + new TextDecoder().decode(value)+ "]";
                         const str = strFromUtf8Ab(value);
-                        debugger;
                         const changes = JSON.parse(str);
                         changes.forEach((c: any) => {
                             dispatch({ type: "increment", payload: c.index });
