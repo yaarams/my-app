@@ -18,7 +18,9 @@ const reducer = (state: State, action: Action) : State => {
 
 function App() {
   const [count, dispatch] = useReducer(reducer, 0);
-  streamFetch(dispatch);
+  if (count === 0) {
+    streamFetch(dispatch);
+  }
   return (
     <div className="App">
       <header className="App-header">

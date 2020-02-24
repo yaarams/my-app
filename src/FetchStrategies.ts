@@ -61,7 +61,6 @@ export function streamFetch(dispatch: React.Dispatch<Action>) {
                 function push() {
                     // "done" is a Boolean and value a "Uint8Array"
                     reader && reader.read().then(({ done, value }) => {
-                        console.log('readline', value);
                         // Is there no more data to read?
                         if (done) {
                             controller.close();
@@ -71,6 +70,7 @@ export function streamFetch(dispatch: React.Dispatch<Action>) {
                         controller.enqueue(value);
                         // const str = "[" + new TextDecoder().decode(value)+ "]";
                         const str = strFromUtf8Ab(value);
+                        debugger;
                         const changes = JSON.parse(str);
                         changes.forEach((c: any) => {
                             dispatch({ type: "increment", payload: c.index });
@@ -89,7 +89,5 @@ export function streamFetch(dispatch: React.Dispatch<Action>) {
             }
         });
         return new Response(stream, { headers: { "Content-Type": "application/jsonl" } })
-    }).then(res => {
-        console.log(res);
-    });;
+    });
 }
