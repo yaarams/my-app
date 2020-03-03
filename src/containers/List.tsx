@@ -5,11 +5,17 @@ import { connect } from "react-redux";
 // import { Dispatch } from "redux";
 
 type ListProps = {
-    sentences: Array<Types.Sentence>;
-}
+  sentences: Array<Types.Sentence>;
+};
+
+let idx: number = 0;
 
 function List(props: ListProps) {
+  
   const { sentences } = props;
+  let renderIdx : number = 0;
+  console.log(idx++, sentences.length, renderIdx);
+
   return (
     <FixedSizeList
       itemData={sentences}
@@ -18,14 +24,20 @@ function List(props: ListProps) {
       itemCount={90}
       itemSize={35}
     >
-      {({ data, index, style }) => <div style={style}>{data[index]}</div>}
+      {({ data, index, style }) => {
+        console.log(renderIdx++);
+        return <div>hi</div>
+        // return <div style={style}>{data[index]}</div>;
+      }}
     </FixedSizeList>
   );
 }
 
-const mapStateToProps = (state : Types.SentencesState) => ({
+const mapStateToProps = (state: Types.SentencesState) => {
+  return ({
     sentences: state.allSentences
-})
+  });
+};
 
 // const mapDispatchToProps = (dispatch: Dispatch<Types.SentencesAction>) => ({
 //     update: dispatch({type: "update"})

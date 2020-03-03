@@ -5,10 +5,28 @@ import * as Types from "../reducers/Types";
 import { SentenceStore } from "../mobx/store";
 import { observer, inject } from "mobx-react";
 import { observable } from "mobx";
+import { aggregationReducer } from "../reducers/Redux";
+import { createSelectorHook } from "react-redux";
 
 interface ListProps extends React.Props<any> {
   store: SentenceStore;
 }
+
+interface ListProps2 extends React.Props<any> {
+  sentences: Array<Types.Sentence>;
+}
+
+const createSelector = (captureName: string = "") => {
+  const sel = ({ aggregations }: SentenceStore) => ({
+    sentences: aggregations[captureName]
+  });
+  return sel;
+};
+
+const createList = (store: SentenceStore, capture: string) => {
+  const sel = createSelector(capture);
+  return inject(sel)(observer(List));
+};
 
 //option #1 - functional comp
 const List = inject("store")(
@@ -54,4 +72,4 @@ export class ListClass extends React.Component<ListProps> {
   }
 }
 
-export default List;
+export default createList;
