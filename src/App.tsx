@@ -1,27 +1,21 @@
 import React, { useReducer, useEffect } from "react";
 import logo from "./logo.svg";
 import "./App.css";
-import { State, Action, streamFetch } from "./FetchStrategies";
+import { streamFetch } from "./FetchStrategies";
 import { FixedSizeList } from "react-window";
+import { sentencesReducer, aggregationsReducer } from "./reducers/Hooks";
 
-const reducer = (state: State[], action: Action) : State[] => {
-  switch (action.type) {
-    case "increment":
-      return state.concat(action.payload);
-    case "decrement":
-      return state.concat(-action.payload);
-    case "reset":
-      return [0];
-    default:
-      throw new Error("Unexpected action");
-  }
-};
  
 function App() {
-  const [count, dispatch] = useReducer(reducer, [0]);
+  const initSentencesState = {allSentences: [], filtered: []};
+  const initAggState = {selected: new Set<string>(), counts: {}};
+
+  const [data, dispatch] = useReducer(sentencesReducer, initSentencesState);
+  const [agg, dispatch2] = useReducer(aggregationsReducer, initAggState);
   useEffect(() => {
     streamFetch(dispatch);
   }, []);
+  const sentences = (data.filtered && data.filtered.length > 0) ? data.filtered : data.allSentences;
   return (
     <div className="App">
       <header className="App-header">
@@ -37,21 +31,31 @@ function App() {
         >
           Learn React
         </a>
-        {/* <div>{count}</div> */}
-        <button onClick={() => dispatch({type: "increment", payload: 1})}>+1</button>
-        <button onClick={() => dispatch({type: "decrement", payload: 1})}>-1</button>
-        <button onClick={() => dispatch({type: "increment", payload: 3})}>+3</button>
-        <button onClick={() => dispatch({type: "reset"})}>0</button>
+         {/* <div>{count}</div> */}
+        <button onClick={() => dispatch2({type: "select", payload: "aaa"})}>aaa</button>
+        <button onClick={() => dispatch2({type: "select", payload: "bbb"})}>bbb</button>
+        <button onClick={() => dispatch({type: "filter", payload: agg.selected})}>filter</button>
         <FixedSizeList
-          itemData={count}
+          itemData={sentences}
           height={300}
           width={300}
           itemCount={90}
           itemSize={35}>
-            {({ data, index, style }) => (
-              <div style={style}>{data[index]}</div>
-            )}
-          </FixedSizeList>
+          {({ data, index, style }) => (
+            <div style={style}>{data[index] && (data[index].index + " " + data[index].word)}</div>
+          )}
+        </FixedSizeList>
+          <div>-----------</div>
+        <FixedSizeList
+          itemData={agg.selected}
+          height={300}
+          width={300}
+          itemCount={90}
+          itemSize={35}>
+          {({ data, index, style }) => (
+            <div style={style}>{data[index]}</div>
+          )}
+        </FixedSizeList>
       </header>
     </div>
   );

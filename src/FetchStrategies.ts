@@ -3,13 +3,7 @@ import axios from 'axios';
 import { of } from 'rxjs';
 import { fromFetch } from 'rxjs/fetch';
 import { switchMap, catchError } from 'rxjs/operators';
-
-
-export type State = number;
-export type Action =
-    | { type: 'increment', payload: number }
-    | { type: 'decrement', payload: number }
-    | { type: 'reset' };
+import { UpdateSentenceAction } from "./reducers/Types";
 
 export function axiosFetch() {
     return axios({
@@ -47,7 +41,12 @@ export function rxjsFetch() {
     });
 }
 
-export function streamFetch(dispatch: React.Dispatch<Action>) {
+// eslint-disable-next-line no-extend-native
+const random = function(arr: Array<any>) {
+    return arr[Math.floor((Math.random() * arr.length))];
+};
+
+export function streamFetch(dispatch: React.Dispatch<UpdateSentenceAction>) {
     return fetch('http://localhost:5000/api/3/search/dummy').then(response => response.body).then(body => {
         const reader = body && body.getReader();
         function strFromUtf8Ab(ab: Uint8Array) {
@@ -72,7 +71,7 @@ export function streamFetch(dispatch: React.Dispatch<Action>) {
                         const str = strFromUtf8Ab(value);
                         const changes = JSON.parse(str);
                         changes.forEach((c: any) => {
-                            dispatch({ type: "increment", payload: c.index });
+                            dispatch({ type: "update", payload: {index: c.index, word: random(["aaa", "bbb", "ccc"])} });
                         });
                         //need to check how much latency it takes to update the store every X time - how it looks, when you render a list of items from the store.
 

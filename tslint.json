@@ -1,0 +1,45 @@
+{
+    // rule bundles
+    "extends": [
+        "tslint:recommended",
+        "tslint-react"
+    ],
+    // customization on top of the defined bundles
+    "rules": {
+        "no-console": {
+            "severity": "warning" // using console.log will result in just a warning
+        },
+        "typedef": [
+            true,
+            "call-signature", // check return types of functions
+            "property-declaration" // check return types interface properties
+        ],
+        "array-type": [
+            true,
+            "generic" // use Array[T] syntax over T[]
+        ],
+        "no-empty": [
+            true,
+            "allow-empty-functions" // allow empty function blocks
+        ],
+        "interface-name": [
+            true,
+            "never-prefix" // don't allow I prefix for interfaces, it's a type, interfaces is just a type implementation detail
+        ],
+        "object-literal-sort-keys": false, // better to sort by importance
+        "interface-over-type-literal": false, // not everything should be an interface, type literals are useful
+        "ordered-imports": false, // imports don't need to be sorted
+        "member-ordering": false, // no order of elements in a class is enforced
+        "jsx-no-multiline-js": false, // you can use multi line code inside a JSX block
+        "jsx-no-lambda": false, // lamba callbacks
+        "max-classes-per-file": false,
+        "object-literal-key-quotes": false
+    },
+    // don't lint dependencies
+    "linterOptions": {
+        "exclude": [
+            "node_modules/**/*.{ts,tsx}",
+            "src/components/editor/extensions/*.js"
+        ]
+    }
+}
