@@ -2,20 +2,22 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 // import App from "./App";
-import App from "./App2";
-// import App from "./App3";
+// import App from "./App2";
+import App from "./App3";
+
 import * as serviceWorker from "./serviceWorker";
-import { createStore } from "redux";
-import { sentenceReducer } from "./reducers/Redux";
-import { Provider } from "react-redux";
+// import { createStore } from "redux";
+// import { sentenceReducer } from "./reducers/Redux";
+// import { Provider } from "react-redux";
 
-const store = createStore(sentenceReducer);
+// const store = createStore(sentenceReducer);
 
-// import { SentenceStore } from "./mobx/store";
-// import { Provider } from "mobx-react";
+import { SentenceStore } from "./mobx/store";
+import { Provider } from "mobx-react";
+// import { Stores } from "./reducers/Types";
+const store: SentenceStore = new SentenceStore();
+// const stores: Stores = { store};
 
-
-// const store: SentenceStore = new SentenceStore();
 ReactDOM.render(
   <Provider store={store}>
     <App />,

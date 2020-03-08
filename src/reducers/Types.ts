@@ -43,4 +43,7 @@ export type SentenceReducer = Reducer<Readonly<SentencesState>, SentenceAction>;
 export const initialSentenceState = { allSentences: new Array<Sentence>(), filtered: new Array<Sentence>() };
 export const initialAggState = { counts: {}, selected: new Set<string>() };
 
+export interface Stores {
+    store: Store
+}
 //sideEffects: filter..

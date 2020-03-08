@@ -8,17 +8,32 @@ import { SentenceStore } from "./mobx/store";
 import { useEffect, useCallback } from "react";
 import * as Types from "./reducers/Types";
 import { streamFetch } from "./FetchStrategies";
-import { observable } from "mobx";
+// import { observable } from "mobx";
+// import { FixedSizeList } from "react-window";
+import {List} from "./components/MobxList";
 
 interface AppProps extends React.Props<any> {
   store?: SentenceStore;
 }
 
-const App = inject("store")(
-  observer((props: AppProps) => {
+// class Row extends React.PureComponent<{ item: any }> {
+//   render() {
+//     const { item } = this.props;
+//     return (
+//       <div>
+//         {item.word} {item.index ? "█".repeat(item.index) : null}
+//       </div>
+//     );
+//   }
+// }
+
+const App =
+  // inject("store")(
+  // observer(
+  (props: AppProps) => {
     const { store } = props;
-    const sentences = observable(store!.sentences);
-    const agg = observable(store!.aggregations);
+    // const sentences = store!.sentences; //observable(store!.sentences);
+    const agg = store!.aggregations; //observable(store!.aggregations);
 
     const dispatch = useCallback(
       (action: Types.UpdateSentenceAction) => {
@@ -31,11 +46,20 @@ const App = inject("store")(
       streamFetch(dispatch);
     }, [dispatch]);
 
+    // const itemRenderer = ({ data, index, style } : {data: any, index: number, style: any}) => {
+    //   if (data[index])
+    //     return <div style={style}>
+    //       <div>{data[index].word}</div>
+    //     </div>;
+    //   return <div>None</div>
+    // }
+
     // const item = (p: any) => {
     //   const { data, index, style } = p;
-    //   const d = data[index];
-    //   console.log(toJS(d));
-    //   return <div style={style}>{data[index]}</div>;
+    //   // const d = data[index];
+    //   // console.log(toJS(d));
+    //   const { word } = data[index] ? data[index] : { word: "" };
+    //   return <div style={style}>{word}</div>;
     // };
 
     return (
@@ -50,29 +74,22 @@ const App = inject("store")(
             ))
           : ""}
         <div>sentences:</div>
-        {sentences
-          ? sentences.map(s => {
-              return (
-                <li>
-                  <ul>{s.word + " " + s.index}</ul>
-                </li>
-              );
-            })
-          : []}
+        //challange - make this work with react-window...
+        <List />
       </div>
     );
-  })
-);
+  };
+// );
+// );
 
-export default App;
+export default inject("store")(observer(App));
 
-//challange - make this work with react-window...
-// <FixedSizeList
-//       itemData={sentences}
-//       height={300}
-//       width={300}
-//       itemCount={90}
-//       itemSize={35}
-//     >
-//       <Observer>{item}</Observer>
-//     </FixedSizeList>
+// {sentences
+//   ? sentences.map(s => {
+//       return (
+//         <li>
+//           <ul>{s.word + " " + s.index}</ul>
+//         </li>
+//       );
+//     })
+//   : []}

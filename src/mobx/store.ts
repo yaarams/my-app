@@ -13,6 +13,7 @@ enableLogging({
 type KeyStore = { [key: string]: number; }
 
 export class SentenceStore {
+// implements Types.Store {
     @observable
     sentences: Array<Types.Sentence> = [];
     state: string = "start";
